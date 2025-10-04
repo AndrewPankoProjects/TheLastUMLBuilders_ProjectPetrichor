@@ -1,0 +1,7 @@
+{
+  "name": "TheLastUMLBuilders",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
