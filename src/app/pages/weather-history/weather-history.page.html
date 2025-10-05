@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Weather History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <h3>Loading History...</h3>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && getHistoryCount() === 0">
+      <ion-icon name="time-outline"></ion-icon>
+      <h2>No Analysis History</h2>
+      <p>Your weather analysis history will appear here once you start exploring weather data.</p>
+      <ion-button routerLink="/weather/tabs/explore" fill="outline">
+        <ion-icon name="search" slot="start"></ion-icon>
+        Start Exploring
+      </ion-button>
+    </div>
+
+    <!-- History List -->
+    <div class="history-list" *ngIf="!isLoading && getHistoryCount() > 0">
+      <ion-card *ngFor="let analysis of analysisHistory" class="history-item">
+        <ion-card-content>
+          <div class="analysis-summary">
+            <h3>{{ analysis.variable.name }}</h3>
+            <p>{{ analysis.location.name }}</p>
+            <p>{{ analysis.dateRange.startDate.toLocaleDateString() }} - {{ analysis.dateRange.endDate.toLocaleDateString() }}</p>
+          </div>
+          <div class="analysis-stats">
+            <span class="stat">Avg: {{ analysis.statistics.mean.toFixed(1) }} {{ analysis.variable.unit }}</span>
+            <span class="stat">Range: {{ analysis.statistics.min.toFixed(1) }} - {{ analysis.statistics.max.toFixed(1) }}</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Clear History Button -->
+    <div class="action-buttons" *ngIf="!isLoading && getHistoryCount() > 0">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        color="danger"
+        (click)="clearHistory()">
+        <ion-icon name="trash" slot="start"></ion-icon>
+        Clear History
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

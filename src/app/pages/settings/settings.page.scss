@@ -1,0 +1,136 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-card {
+  margin-bottom: 20px;
+  
+  ion-card-header {
+    padding-bottom: 10px;
+    
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+  
+  ion-segment {
+    --background: var(--ion-color-light);
+    --indicator-color: var(--ion-color-primary);
+    
+    ion-segment-button {
+      --color-checked: var(--ion-color-primary);
+      
+      ion-label {
+        font-size: 0.9rem;
+      }
+    }
+  }
+  
+  ion-item {
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    margin-bottom: 8px;
+    
+    ion-checkbox {
+      --color: var(--ion-color-primary);
+      --color-checked: var(--ion-color-primary);
+    }
+    
+    ion-label {
+      h3 {
+        color: var(--ion-color-dark);
+        margin: 0 0 5px 0;
+        font-size: 1rem;
+      }
+      
+      p {
+        color: var(--ion-color-medium);
+        margin: 0;
+        font-size: 0.8rem;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+.about-content {
+  text-align: center;
+  
+  h3 {
+    color: var(--ion-color-primary);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  .about-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    ion-button {
+      --color: var(--ion-color-primary);
+      
+      ion-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.action-buttons {
+  margin-top: 30px;
+  
+  ion-button {
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  ion-segment {
+    ion-segment-button {
+      ion-label {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .about-links {
+    align-items: center;
+  }
+}
+
+// Loading and disabled states
+ion-button[disabled] {
+  opacity: 0.6;
+}
+
+// Checkbox styling
+ion-checkbox {
+  --border-color: var(--ion-color-medium);
+  --border-color-checked: var(--ion-color-primary);
+  --checkmark-color: white;
+  --background-checked: var(--ion-color-primary);
+}

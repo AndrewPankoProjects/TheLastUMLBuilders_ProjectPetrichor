@@ -1,0 +1,265 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.progress-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  
+  .step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--ion-color-light);
+    color: var(--ion-color-medium);
+    font-weight: 500;
+    position: relative;
+    
+    &.active {
+      background: var(--ion-color-primary);
+      color: white;
+    }
+    
+    &.completed {
+      background: var(--ion-color-success);
+      color: white;
+    }
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 2px;
+      background: var(--ion-color-light);
+      z-index: -1;
+    }
+    
+    &.active:not(:last-child)::after,
+    &.completed:not(:last-child)::after {
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
+.location-summary-card {
+  margin-bottom: 20px;
+  
+  .location-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    ion-icon {
+      color: var(--ion-color-primary);
+    }
+    
+    span {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.mode-card {
+  margin-bottom: 20px;
+  
+  ion-segment {
+    --background: var(--ion-color-light);
+    --indicator-color: var(--ion-color-primary);
+    
+    ion-segment-button {
+      --color-checked: var(--ion-color-primary);
+      
+      ion-icon {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.custom-date-card, .seasonal-card, .preset-card {
+  margin-bottom: 20px;
+  
+  .date-inputs, .seasonal-inputs {
+    display: grid;
+    gap: 15px;
+    
+    ion-item {
+      --background: var(--ion-color-light);
+      --border-radius: 8px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      
+      ion-label {
+        color: var(--ion-color-dark);
+        font-weight: 500;
+      }
+    }
+  }
+  
+  ion-radio-group {
+    ion-item {
+      --background: var(--ion-color-light);
+      --border-radius: 8px;
+      margin-bottom: 8px;
+      
+      ion-radio {
+        --color: var(--ion-color-primary);
+        --color-checked: var(--ion-color-primary);
+      }
+      
+      ion-label {
+        h3 {
+          color: var(--ion-color-dark);
+          margin: 0 0 5px 0;
+          font-size: 1.1rem;
+        }
+        
+        p {
+          color: var(--ion-color-medium);
+          margin: 0;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+.summary-card {
+  margin-bottom: 20px;
+  
+  .date-summary {
+    h3 {
+      color: var(--ion-color-primary);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+    
+    .validation-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ion-color-warning);
+      font-size: 0.9rem;
+      
+      ion-icon {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.info-card {
+  margin-bottom: 20px;
+  
+  .data-info {
+    p {
+      color: var(--ion-color-dark);
+      margin-bottom: 15px;
+      
+      strong {
+        color: var(--ion-color-primary);
+      }
+    }
+    
+    ul {
+      margin: 15px 0;
+      padding-left: 20px;
+      
+      li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+        
+        strong {
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+    
+    .note {
+      margin-top: 15px;
+      padding: 12px;
+      background: var(--ion-color-primary-tint);
+      border-radius: 8px;
+      color: var(--ion-color-primary-shade);
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+}
+
+.action-buttons {
+  margin-top: 30px;
+  
+  ion-button {
+    margin-bottom: 15px;
+    
+    ion-icon {
+      margin: 0 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .progress-indicator {
+    .step {
+      font-size: 0.8rem;
+      padding: 8px 4px;
+    }
+  }
+  
+  .date-inputs, .seasonal-inputs {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  ion-segment {
+    ion-segment-button {
+      ion-label {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Loading and disabled states
+ion-button[disabled] {
+  opacity: 0.6;
+}
+
+// Datetime styling
+ion-datetime {
+  --background: var(--ion-color-light);
+  --background-rgb: var(--ion-color-light-rgb);
+}
+
+// Select styling
+ion-select {
+  --placeholder-color: var(--ion-color-medium);
+  --placeholder-opacity: 1;
+}
+
+// Radio styling
+ion-radio {
+  --color: var(--ion-color-medium);
+  --color-checked: var(--ion-color-primary);
+}

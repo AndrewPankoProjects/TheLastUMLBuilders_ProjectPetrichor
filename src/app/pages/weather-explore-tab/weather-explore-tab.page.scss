@@ -1,0 +1,150 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  .main-icon {
+    font-size: 60px;
+    color: var(--ion-color-primary);
+    margin-bottom: 15px;
+  }
+  
+  h1 {
+    color: var(--ion-color-primary);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+.selection-card, .info-card, .quick-stats {
+  margin-bottom: 20px;
+  
+  ion-card-header {
+    padding-bottom: 10px;
+    
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+}
+
+.form-section {
+  ion-item {
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    margin-bottom: 15px;
+    
+    ion-label {
+      color: var(--ion-color-dark);
+      font-weight: 500;
+    }
+    
+    ion-input, ion-select {
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.data-sources {
+  .source-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    
+    h4 {
+      color: var(--ion-color-primary);
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+    }
+    
+    p {
+      color: var(--ion-color-dark);
+      margin: 0 0 8px 0;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .coverage {
+      color: var(--ion-color-medium);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  
+  .stat-item {
+    text-align: center;
+    padding: 15px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    
+    .stat-number {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+.action-buttons {
+  margin: 30px 0;
+  
+  ion-button {
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .welcome-section {
+    .main-icon {
+      font-size: 50px;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}

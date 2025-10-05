@@ -1,0 +1,226 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/variables"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Select Date Range</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="step completed">1. Location</div>
+      <div class="step completed">2. Variables</div>
+      <div class="step active">3. Date Range</div>
+      <div class="step">4. Analysis</div>
+    </div>
+
+    <!-- Location Summary -->
+    <ion-card class="location-summary-card" *ngIf="selectedLocation">
+      <ion-card-content>
+        <div class="location-info">
+          <ion-icon name="location"></ion-icon>
+          <span>{{ selectedLocation.name }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Selection Mode -->
+    <ion-card class="mode-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="calendar"></ion-icon>
+          Date Range Selection
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="selectionMode" (ionChange)="onSelectionModeChange($event)">
+          <ion-segment-button value="custom">
+            <ion-icon name="create"></ion-icon>
+            <ion-label>Custom</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="seasonal">
+            <ion-icon name="leaf"></ion-icon>
+            <ion-label>Seasonal</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="preset">
+            <ion-icon name="time"></ion-icon>
+            <ion-label>Preset</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Custom Date Range -->
+    <ion-card class="custom-date-card" *ngIf="selectionMode === 'custom'">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="calendar-outline"></ion-icon>
+          Custom Date Range
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="date-inputs">
+          <ion-item>
+            <ion-label position="stacked">Start Date</ion-label>
+            <ion-datetime
+              [(ngModel)]="startDate"
+              (ionChange)="onCustomDateChange()"
+              presentation="date"
+              [max]="formatDate(new Date())"
+              [min]="formatDate(new Date(1980, 0, 1))">
+            </ion-datetime>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">End Date</ion-label>
+            <ion-datetime
+              [(ngModel)]="endDate"
+              (ionChange)="onCustomDateChange()"
+              presentation="date"
+              [max]="formatDate(new Date())"
+              [min]="formatDate(new Date(1980, 0, 1))">
+            </ion-datetime>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Seasonal Selection -->
+    <ion-card class="seasonal-card" *ngIf="selectionMode === 'seasonal'">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="leaf-outline"></ion-icon>
+          Seasonal Selection
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="seasonal-inputs">
+          <ion-item>
+            <ion-label position="stacked">Season</ion-label>
+            <ion-select
+              [(ngModel)]="selectedSeason"
+              (ionChange)="onSeasonChange($event)"
+              placeholder="Select season">
+              <ion-select-option value="spring">
+                <ion-icon name="flower"></ion-icon>
+                Spring ({{ getSeasonalMonths('spring') }})
+              </ion-select-option>
+              <ion-select-option value="summer">
+                <ion-icon name="sunny"></ion-icon>
+                Summer ({{ getSeasonalMonths('summer') }})
+              </ion-select-option>
+              <ion-select-option value="fall">
+                <ion-icon name="leaf"></ion-icon>
+                Fall ({{ getSeasonalMonths('fall') }})
+              </ion-select-option>
+              <ion-select-option value="winter">
+                <ion-icon name="snow"></ion-icon>
+                Winter ({{ getSeasonalMonths('winter') }})
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Year</ion-label>
+            <ion-select
+              [(ngModel)]="selectedYear"
+              (ionChange)="onYearChange($event)"
+              placeholder="Select year">
+              <ion-select-option *ngFor="let year of getAvailableYears()" [value]="year">
+                {{ year }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Preset Ranges -->
+    <ion-card class="preset-card" *ngIf="selectionMode === 'preset'">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="time-outline"></ion-icon>
+          Preset Ranges
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-radio-group [(ngModel)]="selectedPreset" (ionChange)="onPresetChange($event)">
+          <ion-item *ngFor="let preset of presetRanges">
+            <ion-radio slot="start" [value]="preset.id"></ion-radio>
+            <ion-label>
+              <h3>{{ preset.name }}</h3>
+              <p>{{ preset.days }} days</p>
+            </ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Date Range Summary -->
+    <ion-card class="summary-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          Selected Date Range
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="date-summary">
+          <h3>{{ getDateRangeSummary() }}</h3>
+          <div class="validation-message" *ngIf="getValidationMessage()">
+            <ion-icon name="warning" color="warning"></ion-icon>
+            <span>{{ getValidationMessage() }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Data Availability Info -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Data Availability
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="data-info">
+          <p><strong>NASA Data Coverage:</strong></p>
+          <ul>
+            <li><strong>MERRA-2:</strong> 1980 - Present (Global)</li>
+            <li><strong>GPM:</strong> 2014 - Present (Precipitation)</li>
+            <li><strong>MODIS:</strong> 2000 - Present (Cloud, Aerosol)</li>
+          </ul>
+          <p class="note">
+            <ion-icon name="bulb"></ion-icon>
+            Longer time ranges provide more reliable statistical analysis and trend detection.
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="continueToDashboard()"
+        [disabled]="!isDateRangeValid()">
+        <ion-icon name="analytics" slot="start"></ion-icon>
+        Generate Analysis
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        size="large" 
+        (click)="goBack()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Back to Variables
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

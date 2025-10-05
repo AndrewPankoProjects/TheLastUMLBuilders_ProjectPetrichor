@@ -1,0 +1,114 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Weather Explorer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="welcome-section">
+      <ion-icon name="search" class="main-icon"></ion-icon>
+      <h1>Explore Weather Data</h1>
+      <p>Select your location, weather variable, and time range to analyze historical weather patterns using NASA data.</p>
+    </div>
+
+    <ion-card class="selection-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="settings"></ion-icon>
+          Analysis Parameters
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="form-section">
+          <ion-item>
+            <ion-label position="stacked">Location</ion-label>
+            <ion-input 
+              [(ngModel)]="selectedLocation" 
+              placeholder="Enter city name"
+              type="text">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Weather Variable</ion-label>
+            <ion-select [(ngModel)]="selectedVariable" placeholder="Select variable">
+              <ion-select-option *ngFor="let variable of weatherVariables" [value]="variable.id">
+                {{ variable.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Time Range</ion-label>
+            <ion-select [(ngModel)]="selectedDateRange" placeholder="Select time range">
+              <ion-select-option *ngFor="let range of dateRanges" [value]="range.value">
+                {{ range.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          Available Data Sources
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="data-sources">
+          <div class="source-item">
+            <h4>MERRA-2</h4>
+            <p>Modern-Era Retrospective analysis for Research and Applications</p>
+            <span class="coverage">1980 - Present</span>
+          </div>
+          <div class="source-item">
+            <h4>GPM</h4>
+            <p>Global Precipitation Measurement</p>
+            <span class="coverage">2014 - Present</span>
+          </div>
+          <div class="source-item">
+            <h4>MODIS</h4>
+            <p>Moderate Resolution Imaging Spectroradiometer</p>
+            <span class="coverage">2000 - Present</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="action-buttons">
+      <ion-button expand="block" size="large" (click)="startAnalysis()" [disabled]="!isReadyForAnalysis()">
+        <ion-icon name="analytics" slot="start"></ion-icon>
+        Start Weather Analysis
+      </ion-button>
+    </div>
+
+    <ion-card class="quick-stats">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="stats-chart"></ion-icon>
+          Quick Stats
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number">40+</span>
+            <span class="stat-label">Years of Data</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Weather Variables</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">Global</span>
+            <span class="stat-label">Coverage</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

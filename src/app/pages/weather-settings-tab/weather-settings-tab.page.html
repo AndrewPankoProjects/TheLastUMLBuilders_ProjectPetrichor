@@ -1,0 +1,221 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="header-section">
+      <ion-icon name="settings" class="main-icon"></ion-icon>
+      <h1>App Settings</h1>
+      <p>Customize your weather exploration experience</p>
+    </div>
+
+    <!-- Units Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="thermometer"></ion-icon>
+          Units & Measurements
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="settings.units" (ionChange)="onSettingChange()">
+          <ion-segment-button value="metric">
+            <ion-label>Metric (°C, mm, m/s)</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="imperial">
+            <ion-label>Imperial (°F, in, mph)</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Theme Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="color-palette"></ion-icon>
+          Appearance
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="settings.theme" (ionChange)="onSettingChange()">
+          <ion-segment-button value="light">
+            <ion-label>Light</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="dark">
+            <ion-label>Dark</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="auto">
+            <ion-label>Auto</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notification Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="notifications"></ion-icon>
+          Notifications
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-toggle 
+            [(ngModel)]="settings.notifications" 
+            (ionChange)="onSettingChange()">
+          </ion-toggle>
+          <ion-label>
+            <h3>Enable Notifications</h3>
+            <p>Get notified about extreme weather alerts</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Location Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="location"></ion-icon>
+          Location Services
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-toggle 
+            [(ngModel)]="settings.autoLocation" 
+            (ionChange)="onSettingChange()">
+          </ion-toggle>
+          <ion-label>
+            <h3>Auto-detect Location</h3>
+            <p>Automatically use your current location</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Data Source Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="server"></ion-icon>
+          Data Sources
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Primary Data Source</ion-label>
+          <ion-select [(ngModel)]="settings.dataSource" (ionChange)="onSettingChange()">
+            <ion-select-option value="nasa">NASA Earth Data</ion-select-option>
+            <ion-select-option value="noaa">NOAA</ion-select-option>
+            <ion-select-option value="combined">Combined Sources</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Language Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="language"></ion-icon>
+          Language & Region
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Language</ion-label>
+          <ion-select [(ngModel)]="settings.language" (ionChange)="onSettingChange()">
+            <ion-select-option value="en">English</ion-select-option>
+            <ion-select-option value="es">Español</ion-select-option>
+            <ion-select-option value="fr">Français</ion-select-option>
+            <ion-select-option value="de">Deutsch</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Storage Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="storage"></ion-icon>
+          Storage & Cache
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Cache Size</ion-label>
+          <ion-select [(ngModel)]="settings.cacheSize" (ionChange)="onSettingChange()">
+            <ion-select-option value="small">Small (50 MB)</ion-select-option>
+            <ion-select-option value="medium">Medium (100 MB)</ion-select-option>
+            <ion-select-option value="large">Large (200 MB)</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="storage-info">
+          <p><strong>Current Usage:</strong> {{ getDataUsage() }}</p>
+          <p><strong>Cache Status:</strong> Active</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- App Information -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          App Information
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="app-info">
+          <div class="info-item">
+            <span class="info-label">Version:</span>
+            <span class="info-value">{{ getAppVersion() }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Build:</span>
+            <span class="info-value">2024.01.15</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Platform:</span>
+            <span class="info-value">Ionic Angular</span>
+          </div>
+        </div>
+        
+        <div class="app-links">
+          <ion-button fill="clear" size="small">
+            <ion-icon name="document-text" slot="start"></ion-icon>
+            Privacy Policy
+          </ion-button>
+          <ion-button fill="clear" size="small">
+            <ion-icon name="document" slot="start"></ion-icon>
+            Terms of Service
+          </ion-button>
+          <ion-button fill="clear" size="small">
+            <ion-icon name="help-circle" slot="start"></ion-icon>
+            Help & Support
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button expand="block" fill="outline" (click)="exportSettings()">
+        <ion-icon name="download" slot="start"></ion-icon>
+        Export Settings
+      </ion-button>
+      
+      <ion-button expand="block" fill="outline" color="warning" (click)="resetSettings()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Reset to Defaults
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

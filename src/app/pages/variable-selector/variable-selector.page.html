@@ -1,0 +1,205 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/location"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Select Variables</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="step completed">1. Location</div>
+      <div class="step active">2. Variables</div>
+      <div class="step">3. Date Range</div>
+      <div class="step">4. Analysis</div>
+    </div>
+
+    <!-- Location Summary -->
+    <ion-card class="location-summary-card" *ngIf="selectedLocation">
+      <ion-card-content>
+        <div class="location-info">
+          <ion-icon name="location"></ion-icon>
+          <span>{{ selectedLocation.name }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Search and Filter -->
+    <ion-card class="filter-card">
+      <ion-card-content>
+        <ion-searchbar
+          [(ngModel)]="searchQuery"
+          (ionInput)="onSearchInput($event)"
+          placeholder="Search variables..."
+          show-clear-button="true">
+        </ion-searchbar>
+        
+        <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)">
+          <ion-segment-button value="all">
+            <ion-label>All</ion-label>
+          </ion-segment-button>
+          <ion-segment-button *ngFor="let category of categories" [value]="category.id">
+            <ion-icon [name]="category.icon"></ion-icon>
+            <ion-label>{{ category.name }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Quick Actions -->
+    <ion-card class="quick-actions-card">
+      <ion-card-content>
+        <div class="quick-actions">
+          <ion-button 
+            fill="outline" 
+            size="small"
+            (click)="selectRecommended()">
+            <ion-icon name="star" slot="start"></ion-icon>
+            Recommended
+          </ion-button>
+          
+          <ion-button 
+            fill="outline" 
+            size="small"
+            (click)="clearAllSelections()">
+            <ion-icon name="close-circle" slot="start"></ion-icon>
+            Clear All
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Variables by Category -->
+    <div class="variables-section" *ngIf="selectedCategory === 'all'">
+      <div *ngFor="let category of categories" class="category-section">
+        <div class="category-header">
+          <div class="category-title">
+            <ion-icon [name]="getCategoryIcon(category.id)"></ion-icon>
+            <h3>{{ category.name }}</h3>
+            <span class="count">({{ variablesByCategory[category.id].length }})</span>
+          </div>
+          <ion-button 
+            fill="clear" 
+            size="small"
+            (click)="selectAllInCategory(category.id)">
+            <ion-icon 
+              [name]="isCategoryFullySelected(category.id) ? 'checkmark-circle' : 
+                      isCategoryPartiallySelected(category.id) ? 'remove-circle' : 'ellipse-outline'">
+            </ion-icon>
+            {{ isCategoryFullySelected(category.id) ? 'All' : 
+               isCategoryPartiallySelected(category.id) ? 'Some' : 'None' }}
+          </ion-button>
+        </div>
+        
+        <ion-card class="category-card">
+          <ion-card-content>
+            <div class="variables-grid">
+              <div 
+                *ngFor="let variable of variablesByCategory[category.id]" 
+                class="variable-item"
+                [class.selected]="isVariableSelected(variable)"
+                (click)="toggleVariable(variable)">
+                <div class="variable-header">
+                  <ion-checkbox 
+                    [checked]="isVariableSelected(variable)"
+                    (ionChange)="toggleVariable(variable)">
+                  </ion-checkbox>
+                  <div class="variable-info">
+                    <h4>{{ variable.name }}</h4>
+                    <p>{{ variable.description }}</p>
+                  </div>
+                  <div class="variable-unit">
+                    {{ variable.unit }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Filtered Variables -->
+    <div class="variables-section" *ngIf="selectedCategory !== 'all'">
+      <ion-card class="filtered-variables-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon [name]="getCategoryIcon(selectedCategory)"></ion-icon>
+            {{ getCategoryName(selectedCategory) }} Variables
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="variables-grid">
+            <div 
+              *ngFor="let variable of getFilteredVariables()" 
+              class="variable-item"
+              [class.selected]="isVariableSelected(variable)"
+              (click)="toggleVariable(variable)">
+              <div class="variable-header">
+                <ion-checkbox 
+                  [checked]="isVariableSelected(variable)"
+                  (ionChange)="toggleVariable(variable)">
+                </ion-checkbox>
+                <div class="variable-info">
+                  <h4>{{ variable.name }}</h4>
+                  <p>{{ variable.description }}</p>
+                </div>
+                <div class="variable-unit">
+                  {{ variable.unit }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Selected Variables Summary -->
+    <ion-card class="selected-summary-card" *ngIf="selectedVariables.length > 0">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="checkmark-circle"></ion-icon>
+          Selected Variables ({{ getSelectedCount() }})
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="selected-list">
+          <ion-chip 
+            *ngFor="let variable of selectedVariables" 
+            color="primary">
+            <ion-icon [name]="getCategoryIcon(variable.category)"></ion-icon>
+            <ion-label>{{ variable.name }}</ion-label>
+            <ion-icon 
+              name="close" 
+              (click)="toggleVariable(variable)">
+            </ion-icon>
+          </ion-chip>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="continueToDateRange()"
+        [disabled]="!canContinue()">
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        Continue to Date Range
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        size="large" 
+        (click)="goBack()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Back to Location
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

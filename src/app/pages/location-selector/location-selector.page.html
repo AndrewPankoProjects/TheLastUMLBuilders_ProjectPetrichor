@@ -1,0 +1,172 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/weather/tabs/explore"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Select Location</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="step active">1. Location</div>
+      <div class="step">2. Variables</div>
+      <div class="step">3. Date Range</div>
+      <div class="step">4. Analysis</div>
+    </div>
+
+    <!-- Search Section -->
+    <ion-card class="search-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="search"></ion-icon>
+          Search Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-searchbar
+          [(ngModel)]="searchQuery"
+          (ionInput)="onSearchInput($event)"
+          placeholder="Enter city name or location..."
+          show-clear-button="true">
+        </ion-searchbar>
+
+        <!-- Search Results -->
+        <div class="search-results" *ngIf="searchResults.length > 0">
+          <ion-list>
+            <ion-item 
+              *ngFor="let location of searchResults" 
+              button
+              (click)="selectLocationFromSearch(location)">
+              <ion-icon name="location" slot="start"></ion-icon>
+              <ion-label>
+                <h3>{{ location.name }}</h3>
+                <p>{{ location.latitude | number:'1.4-4' }}, {{ location.longitude | number:'1.4-4' }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Current Location Button -->
+    <ion-card class="current-location-card">
+      <ion-card-content>
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="useCurrentLocation()"
+          [disabled]="isLoading">
+          <ion-icon name="locate" slot="start"></ion-icon>
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          {{ isLoading ? 'Getting Location...' : 'Use Current Location' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Coordinate Input -->
+    <ion-card class="coordinates-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="grid"></ion-icon>
+          Enter Coordinates
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="coordinate-inputs">
+          <ion-item>
+            <ion-label position="stacked">Latitude</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="latitude"
+              (ionInput)="onCoordinateInput()"
+              placeholder="e.g., 40.7128"
+              step="0.000001">
+            </ion-input>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Longitude</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="longitude"
+              (ionInput)="onCoordinateInput()"
+              placeholder="e.g., -74.0060"
+              step="0.000001">
+            </ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Map Toggle -->
+    <ion-card class="map-card">
+      <ion-card-content>
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="toggleMap()">
+          <ion-icon [name]="showMap ? 'eye-off' : 'eye'" slot="start"></ion-icon>
+          {{ showMap ? 'Hide Map' : 'Show Interactive Map' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Interactive Map -->
+    <ion-card class="map-container-card" *ngIf="showMap">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="map"></ion-icon>
+          Interactive Map
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="map-instructions">
+          <p>Click on the map to select a location</p>
+        </div>
+        <div #mapContainer class="map-container"></div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Selected Location Summary -->
+    <ion-card class="selected-location-card" *ngIf="selectedLocation">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="checkmark-circle"></ion-icon>
+          Selected Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="location-summary">
+          <h3>{{ selectedLocation.name }}</h3>
+          <p><strong>Coordinates:</strong> {{ selectedLocation.latitude | number:'1.6-6' }}, {{ selectedLocation.longitude | number:'1.6-6' }}</p>
+          <p *ngIf="selectedLocation.country"><strong>Country:</strong> {{ selectedLocation.country }}</p>
+          <p *ngIf="selectedLocation.state"><strong>State:</strong> {{ selectedLocation.state }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="continueToVariables()"
+        [disabled]="!isLocationValid()">
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        Continue to Variables
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        size="large" 
+        (click)="goBack()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Back to Explore
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

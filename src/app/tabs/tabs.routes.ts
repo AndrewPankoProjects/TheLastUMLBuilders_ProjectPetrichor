@@ -7,30 +7,30 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'explore',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('../pages/weather-explore-tab/weather-explore-tab.page').then((m) => m.WeatherExploreTabPage),
       },
       {
-        path: 'tab2',
+        path: 'history',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('../pages/weather-history-tab/weather-history-tab.page').then((m) => m.WeatherHistoryTabPage),
       },
       {
-        path: 'tab3',
+        path: 'settings',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../pages/weather-settings-tab/weather-settings-tab.page').then((m) => m.WeatherSettingsTabPage),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/weather/tabs/explore',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/weather/tabs/explore',
     pathMatch: 'full',
   },
 ];

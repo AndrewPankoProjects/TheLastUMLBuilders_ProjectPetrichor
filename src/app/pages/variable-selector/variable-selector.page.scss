@@ -1,0 +1,305 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.progress-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  
+  .step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--ion-color-light);
+    color: var(--ion-color-medium);
+    font-weight: 500;
+    position: relative;
+    
+    &.active {
+      background: var(--ion-color-primary);
+      color: white;
+    }
+    
+    &.completed {
+      background: var(--ion-color-success);
+      color: white;
+    }
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 2px;
+      background: var(--ion-color-light);
+      z-index: -1;
+    }
+    
+    &.active:not(:last-child)::after,
+    &.completed:not(:last-child)::after {
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
+.location-summary-card {
+  margin-bottom: 20px;
+  
+  .location-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    ion-icon {
+      color: var(--ion-color-primary);
+    }
+    
+    span {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.filter-card {
+  margin-bottom: 20px;
+  
+  ion-segment {
+    margin-top: 15px;
+    
+    ion-segment-button {
+      --color-checked: var(--ion-color-primary);
+      
+      ion-icon {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.quick-actions-card {
+  margin-bottom: 20px;
+  
+  .quick-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    
+    ion-button {
+      flex: 1;
+      max-width: 150px;
+    }
+  }
+}
+
+.variables-section {
+  margin-bottom: 20px;
+}
+
+.category-section {
+  margin-bottom: 25px;
+  
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+        font-size: 1.2rem;
+      }
+      
+      h3 {
+        margin: 0;
+        color: var(--ion-color-dark);
+        font-size: 1.3rem;
+      }
+      
+      .count {
+        color: var(--ion-color-medium);
+        font-size: 0.9rem;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+.category-card, .filtered-variables-card {
+  .variables-grid {
+    display: grid;
+    gap: 10px;
+    
+    .variable-item {
+      padding: 15px;
+      border-radius: 8px;
+      background: var(--ion-color-light);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: var(--ion-color-light-shade);
+      }
+      
+      &.selected {
+        background: var(--ion-color-primary-tint);
+        border-color: var(--ion-color-primary);
+      }
+      
+      .variable-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        
+        ion-checkbox {
+          --size: 20px;
+        }
+        
+        .variable-info {
+          flex: 1;
+          
+          h4 {
+            margin: 0 0 5px 0;
+            color: var(--ion-color-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+          
+          p {
+            margin: 0;
+            color: var(--ion-color-medium);
+            font-size: 0.9rem;
+            line-height: 1.4;
+          }
+        }
+        
+        .variable-unit {
+          color: var(--ion-color-primary);
+          font-weight: 600;
+          font-size: 0.9rem;
+          background: var(--ion-color-primary-tint);
+          padding: 4px 8px;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+
+.selected-summary-card {
+  margin-bottom: 20px;
+  
+  .selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    ion-chip {
+      --background: var(--ion-color-primary);
+      --color: white;
+      
+      ion-icon {
+        &:first-child {
+          margin-right: 5px;
+        }
+        
+        &:last-child {
+          margin-left: 5px;
+          cursor: pointer;
+          
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+  }
+}
+
+.action-buttons {
+  margin-top: 30px;
+  
+  ion-button {
+    margin-bottom: 15px;
+    
+    ion-icon {
+      margin: 0 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .progress-indicator {
+    .step {
+      font-size: 0.8rem;
+      padding: 8px 4px;
+    }
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+    
+    ion-button {
+      max-width: none;
+    }
+  }
+  
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .variable-item {
+    .variable-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      
+      .variable-unit {
+        align-self: flex-end;
+      }
+    }
+  }
+  
+  .selected-list {
+    justify-content: center;
+  }
+}
+
+// Loading and disabled states
+ion-button[disabled] {
+  opacity: 0.6;
+}
+
+// Segment styling
+ion-segment {
+  --background: var(--ion-color-light);
+  --indicator-color: var(--ion-color-primary);
+}
+
+// Checkbox styling
+ion-checkbox {
+  --border-color: var(--ion-color-medium);
+  --border-color-checked: var(--ion-color-primary);
+  --checkmark-color: white;
+  --background-checked: var(--ion-color-primary);
+}

@@ -1,0 +1,234 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  .main-icon {
+    font-size: 60px;
+    color: var(--ion-color-primary);
+    margin-bottom: 15px;
+  }
+  
+  h1 {
+    color: var(--ion-color-primary);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+.summary-card {
+  margin-bottom: 20px;
+  
+  .summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: var(--ion-color-light);
+      border-radius: 8px;
+      
+      .stat-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        margin-bottom: 5px;
+      }
+      
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+}
+
+.history-section {
+  margin-bottom: 30px;
+  
+  h2 {
+    color: var(--ion-color-dark);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+  }
+  
+  ion-list {
+    background: transparent;
+    
+    .history-item {
+      --background: transparent;
+      --padding-start: 0;
+      --padding-end: 0;
+      margin-bottom: 15px;
+      
+      .analysis-card {
+        width: 100%;
+        margin: 0;
+        
+        .analysis-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 15px;
+          
+          .analysis-info {
+            h3 {
+              color: var(--ion-color-primary);
+              margin: 0 0 5px 0;
+              font-size: 1.2rem;
+            }
+            
+            p {
+              color: var(--ion-color-dark);
+              margin: 0 0 5px 0;
+              font-size: 0.9rem;
+            }
+            
+            .date-range {
+              color: var(--ion-color-medium);
+              font-size: 0.8rem;
+            }
+          }
+        }
+        
+        .analysis-details {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 15px;
+          
+          .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            
+            ion-icon {
+              color: var(--ion-color-primary);
+              font-size: 1rem;
+            }
+            
+            span {
+              color: var(--ion-color-dark);
+              font-size: 0.9rem;
+            }
+          }
+        }
+        
+        .analysis-actions {
+          display: flex;
+          gap: 10px;
+          
+          ion-button {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  
+  ion-icon {
+    font-size: 80px;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    color: var(--ion-color-dark);
+    margin-bottom: 15px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+}
+
+.tips-card {
+  margin-bottom: 20px;
+  
+  ion-card-header {
+    padding-bottom: 10px;
+    
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+  
+  .tips-list {
+    margin: 0;
+    padding-left: 20px;
+    
+    li {
+      margin-bottom: 10px;
+      color: var(--ion-color-dark);
+      line-height: 1.5;
+    }
+  }
+}
+
+.action-buttons {
+  margin: 30px 0;
+  
+  ion-button {
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header-section {
+    .main-icon {
+      font-size: 50px;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .summary-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .analysis-details {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .analysis-actions {
+    flex-direction: column;
+  }
+}

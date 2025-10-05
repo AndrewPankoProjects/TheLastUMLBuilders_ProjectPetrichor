@@ -1,0 +1,357 @@
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.progress-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  
+  .step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--ion-color-light);
+    color: var(--ion-color-medium);
+    font-weight: 500;
+    position: relative;
+    
+    &.active {
+      background: var(--ion-color-primary);
+      color: white;
+    }
+    
+    &.completed {
+      background: var(--ion-color-success);
+      color: white;
+    }
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 2px;
+      background: var(--ion-color-light);
+      z-index: -1;
+    }
+    
+    &.active:not(:last-child)::after,
+    &.completed:not(:last-child)::after {
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
+.loading-container {
+  text-align: center;
+  padding: 60px 20px;
+  
+  ion-spinner {
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    color: var(--ion-color-primary);
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+.error-card {
+  margin-bottom: 20px;
+  
+  .error-content {
+    text-align: center;
+    
+    ion-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    h3 {
+      color: var(--ion-color-danger);
+      margin-bottom: 10px;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.summary-card {
+  margin-bottom: 20px;
+  
+  .summary-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    
+    .location-info, .variable-info, .date-info, .data-points {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: var(--ion-color-light);
+      border-radius: 8px;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+      
+      span {
+        color: var(--ion-color-dark);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.statistics-card {
+  margin-bottom: 20px;
+  
+  .statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: var(--ion-color-light);
+      border-radius: 8px;
+      
+      h4 {
+        margin: 0 0 8px 0;
+        color: var(--ion-color-medium);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      
+      .stat-value {
+        margin: 0;
+        color: var(--ion-color-primary);
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.trend-card {
+  margin-bottom: 20px;
+  
+  .trend-content {
+    .trend-direction {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      
+      ion-icon {
+        font-size: 1.5rem;
+      }
+      
+      .trend-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+      }
+    }
+    
+    .trend-details {
+      p {
+        margin: 5px 0;
+        color: var(--ion-color-medium);
+        
+        strong {
+          color: var(--ion-color-dark);
+        }
+      }
+    }
+  }
+}
+
+.probability-card {
+  margin-bottom: 20px;
+  
+  .probability-content {
+    text-align: center;
+    
+    .probability-value {
+      margin-bottom: 15px;
+      
+      .percentage {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        margin-bottom: 5px;
+      }
+      
+      .condition {
+        font-size: 1.1rem;
+        color: var(--ion-color-dark);
+        font-weight: 500;
+      }
+    }
+    
+    .probability-description {
+      color: var(--ion-color-medium);
+      line-height: 1.5;
+    }
+  }
+}
+
+.chart-controls-card {
+  margin-bottom: 20px;
+  
+  .chart-toggles {
+    ion-item {
+      --background: var(--ion-color-light);
+      --border-radius: 8px;
+      margin-bottom: 8px;
+      
+      ion-checkbox {
+        --color: var(--ion-color-primary);
+        --color-checked: var(--ion-color-primary);
+      }
+      
+      ion-label {
+        color: var(--ion-color-dark);
+      }
+    }
+  }
+}
+
+.charts-section {
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  margin-bottom: 20px;
+  
+  .chart-container {
+    position: relative;
+    height: 400px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    overflow: hidden;
+    
+    .chart-placeholder {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: var(--ion-color-medium);
+      text-align: center;
+      
+      p {
+        margin: 5px 0;
+        
+        &:first-child {
+          font-weight: 600;
+          color: var(--ion-color-dark);
+        }
+      }
+    }
+  }
+}
+
+.export-card {
+  margin-bottom: 20px;
+  
+  .export-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    
+    ion-button {
+      flex: 1;
+      min-width: 120px;
+    }
+  }
+}
+
+.action-buttons {
+  margin-top: 30px;
+  
+  ion-button {
+    margin-bottom: 15px;
+    
+    ion-icon {
+      margin: 0 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .progress-indicator {
+    .step {
+      font-size: 0.8rem;
+      padding: 8px 4px;
+    }
+  }
+  
+  .summary-content {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .statistics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .chart-container {
+    height: 300px;
+  }
+  
+  .export-buttons {
+    flex-direction: column;
+    
+    ion-button {
+      min-width: none;
+    }
+  }
+}
+
+// Loading and disabled states
+ion-button[disabled] {
+  opacity: 0.6;
+}
+
+// Chart styling
+.chart-placeholder {
+  border: 2px dashed var(--ion-color-medium);
+}
+
+// Icon colors
+ion-icon[name="trending-up"] {
+  color: var(--ion-color-success);
+}
+
+ion-icon[name="trending-down"] {
+  color: var(--ion-color-danger);
+}
+
+ion-icon[name="remove"] {
+  color: var(--ion-color-medium);
+}

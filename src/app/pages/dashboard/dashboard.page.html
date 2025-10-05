@@ -1,0 +1,329 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/date-range"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Weather Analysis</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="startNewAnalysis()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="step completed">1. Location</div>
+      <div class="step completed">2. Variables</div>
+      <div class="step completed">3. Date Range</div>
+      <div class="step active">4. Analysis</div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <h3>Generating Weather Analysis...</h3>
+      <p>Fetching data from NASA Earth observation datasets</p>
+    </div>
+
+    <!-- Error State -->
+    <ion-card class="error-card" *ngIf="error && !isLoading">
+      <ion-card-content>
+        <div class="error-content">
+          <ion-icon name="warning" color="danger"></ion-icon>
+          <h3>Analysis Error</h3>
+          <p>{{ error }}</p>
+          <ion-button (click)="generateAnalysis()" fill="outline">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Retry Analysis
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Analysis Results -->
+    <div class="analysis-results" *ngIf="currentAnalysis && !isLoading && !error">
+      <!-- Analysis Summary -->
+      <ion-card class="summary-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="analytics"></ion-icon>
+            Analysis Summary
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="summary-content">
+            <div class="location-info">
+              <ion-icon name="location"></ion-icon>
+              <span>{{ currentAnalysis.location.name }}</span>
+            </div>
+            <div class="variable-info">
+              <ion-icon name="thermometer"></ion-icon>
+              <span>{{ currentAnalysis.variable.name }} ({{ currentAnalysis.variable.unit }})</span>
+            </div>
+            <div class="date-info">
+              <ion-icon name="calendar"></ion-icon>
+              <span>{{ currentAnalysis.dateRange.startDate.toLocaleDateString() }} - {{ currentAnalysis.dateRange.endDate.toLocaleDateString() }}</span>
+            </div>
+            <div class="data-points">
+              <ion-icon name="bar-chart"></ion-icon>
+              <span>{{ currentAnalysis.dataPoints.length }} data points</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Key Statistics -->
+      <ion-card class="statistics-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart"></ion-icon>
+            Key Statistics
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="statistics-grid">
+            <div class="stat-item">
+              <h4>Average</h4>
+              <p class="stat-value">{{ currentAnalysis.statistics.mean.toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+            <div class="stat-item">
+              <h4>Median</h4>
+              <p class="stat-value">{{ currentAnalysis.statistics.median.toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+            <div class="stat-item">
+              <h4>Min</h4>
+              <p class="stat-value">{{ currentAnalysis.statistics.min.toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+            <div class="stat-item">
+              <h4>Max</h4>
+              <p class="stat-value">{{ currentAnalysis.statistics.max.toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+            <div class="stat-item">
+              <h4>Std Dev</h4>
+              <p class="stat-value">{{ currentAnalysis.statistics.standardDeviation.toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+            <div class="stat-item">
+              <h4>Range</h4>
+              <p class="stat-value">{{ (currentAnalysis.statistics.max - currentAnalysis.statistics.min).toFixed(1) }} {{ currentAnalysis.variable.unit }}</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Trend Analysis -->
+      <ion-card class="trend-card" *ngIf="currentAnalysis.trends">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="trending-up"></ion-icon>
+            Trend Analysis
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="trend-content">
+            <div class="trend-direction">
+              <ion-icon 
+                [name]="currentAnalysis.trends.direction === 'increasing' ? 'trending-up' : 
+                        currentAnalysis.trends.direction === 'decreasing' ? 'trending-down' : 'remove'"
+                [color]="currentAnalysis.trends.direction === 'increasing' ? 'success' : 
+                        currentAnalysis.trends.direction === 'decreasing' ? 'danger' : 'medium'">
+              </ion-icon>
+              <span class="trend-text">{{ currentAnalysis.trends.direction | titlecase }}</span>
+            </div>
+            <div class="trend-details">
+              <p><strong>Rate:</strong> {{ currentAnalysis.trends.rate.toFixed(3) }} {{ currentAnalysis.variable.unit }}/day</p>
+              <p><strong>Significance:</strong> {{ (currentAnalysis.trends.significance * 100).toFixed(1) }}%</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Probability Analysis -->
+      <ion-card class="probability-card" *ngIf="currentAnalysis.probability">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="help-circle"></ion-icon>
+            Extreme Weather Probability
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="probability-content">
+            <div class="probability-value">
+              <span class="percentage">{{ currentAnalysis.probability.probability }}%</span>
+              <span class="condition">{{ currentAnalysis.probability.condition }}</span>
+            </div>
+            <p class="probability-description">{{ currentAnalysis.probability.description }}</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Chart Controls -->
+      <ion-card class="chart-controls-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="options"></ion-icon>
+            Chart Display Options
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-toggles">
+            <ion-item>
+              <ion-checkbox 
+                [(ngModel)]="showTimeSeries" 
+                (ionChange)="toggleChart('timeSeries')">
+              </ion-checkbox>
+              <ion-label>Time Series Chart</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox 
+                [(ngModel)]="showHistogram" 
+                (ionChange)="toggleChart('histogram')">
+              </ion-checkbox>
+              <ion-label>Distribution Histogram</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox 
+                [(ngModel)]="showStatistics" 
+                (ionChange)="toggleChart('statistics')">
+              </ion-checkbox>
+              <ion-label>Statistical Summary</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox 
+                [(ngModel)]="showProbability" 
+                (ionChange)="toggleChart('probability')">
+              </ion-checkbox>
+              <ion-label>Probability Chart</ion-label>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Charts -->
+      <div class="charts-section">
+        <!-- Time Series Chart -->
+        <ion-card class="chart-card" *ngIf="showTimeSeries">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="trending-up"></ion-icon>
+              Time Series Analysis
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <div #timeSeriesChart class="chart-wrapper">
+                <canvas id="timeSeriesChart"></canvas>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Histogram Chart -->
+        <ion-card class="chart-card" *ngIf="showHistogram">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="bar-chart"></ion-icon>
+              Value Distribution
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <div #histogramChart class="chart-wrapper">
+                <canvas id="histogramChart"></canvas>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Statistics Chart -->
+        <ion-card class="chart-card" *ngIf="showStatistics">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="stats-chart"></ion-icon>
+              Statistical Summary
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <div #statisticsChart class="chart-wrapper">
+                <canvas id="statisticsChart"></canvas>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Probability Chart -->
+        <ion-card class="chart-card" *ngIf="showProbability && currentAnalysis.probability">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="pie-chart"></ion-icon>
+              Probability Analysis
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <div #probabilityChart class="chart-wrapper">
+                <canvas id="probabilityChart"></canvas>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Export Options -->
+      <ion-card class="export-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="download"></ion-icon>
+            Export Data
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="export-buttons">
+            <ion-button 
+              fill="outline" 
+              (click)="exportData('csv')">
+              <ion-icon name="document-text" slot="start"></ion-icon>
+              Export CSV
+            </ion-button>
+            <ion-button 
+              fill="outline" 
+              (click)="exportData('json')">
+              <ion-icon name="code" slot="start"></ion-icon>
+              Export JSON
+            </ion-button>
+            <ion-button 
+              fill="outline" 
+              (click)="exportData('png')">
+              <ion-icon name="image" slot="start"></ion-icon>
+              Export Charts
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="startNewAnalysis()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Start New Analysis
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        size="large" 
+        (click)="goBack()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Back to Date Range
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

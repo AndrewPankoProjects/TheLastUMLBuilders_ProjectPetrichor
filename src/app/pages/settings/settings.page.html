@@ -1,0 +1,163 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <!-- Units Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="thermometer"></ion-icon>
+          Units
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="settings.units" (ionChange)="onSettingChange()">
+          <ion-segment-button value="metric">
+            <ion-label>Metric (°C, mm, m/s)</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="imperial">
+            <ion-label>Imperial (°F, in, mph)</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Theme Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="color-palette"></ion-icon>
+          Theme
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="settings.theme" (ionChange)="onSettingChange()">
+          <ion-segment-button value="light">
+            <ion-label>Light</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="dark">
+            <ion-label>Dark</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="auto">
+            <ion-label>Auto</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notification Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="notifications"></ion-icon>
+          Notifications
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-checkbox 
+            [(ngModel)]="settings.notifications" 
+            (ionChange)="onSettingChange()">
+          </ion-checkbox>
+          <ion-label>
+            <h3>Enable Notifications</h3>
+            <p>Get notified about extreme weather alerts</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Location Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="location"></ion-icon>
+          Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-checkbox 
+            [(ngModel)]="settings.autoLocation" 
+            (ionChange)="onSettingChange()">
+          </ion-checkbox>
+          <ion-label>
+            <h3>Auto-detect Location</h3>
+            <p>Automatically use your current location</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Data Source Settings -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="server"></ion-icon>
+          Data Source
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="settings.dataSource" (ionChange)="onSettingChange()">
+          <ion-segment-button value="nasa">
+            <ion-label>NASA</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="noaa">
+            <ion-label>NOAA</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="combined">
+            <ion-label>Combined</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- About Section -->
+    <ion-card class="settings-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          About
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="about-content">
+          <h3>NASA Weather Explorer</h3>
+          <p>Version 1.0.0</p>
+          <p>Built with Ionic Angular and NASA Earth observation data</p>
+          
+          <div class="about-links">
+            <ion-button fill="clear" size="small">
+              <ion-icon name="document-text" slot="start"></ion-icon>
+              Privacy Policy
+            </ion-button>
+            <ion-button fill="clear" size="small">
+              <ion-icon name="document" slot="start"></ion-icon>
+              Terms of Service
+            </ion-button>
+            <ion-button fill="clear" size="small">
+              <ion-icon name="help-circle" slot="start"></ion-icon>
+              Help & Support
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Reset Settings -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        color="warning"
+        (click)="resetSettings()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Reset to Defaults
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

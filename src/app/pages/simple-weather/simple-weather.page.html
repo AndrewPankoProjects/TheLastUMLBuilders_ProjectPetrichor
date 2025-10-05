@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>NASA Weather Explorer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="welcome-section">
+      <ion-icon name="partly-sunny" class="main-icon"></ion-icon>
+      <h1>NASA Weather Explorer</h1>
+      <p>Explore historical weather patterns using real NASA Earth observation data.</p>
+    </div>
+
+    <ion-card class="weather-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="location"></ion-icon>
+          Current Weather Data
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="weather-info">
+          <div class="location">
+            <h3>{{ weatherData.location }}</h3>
+          </div>
+          
+          <div class="weather-stats">
+            <div class="stat-item">
+              <ion-icon name="thermometer"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-value">{{ weatherData.temperature }}°C</span>
+                <span class="stat-label">Temperature</span>
+              </div>
+            </div>
+            
+            <div class="stat-item">
+              <ion-icon name="water"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-value">{{ weatherData.humidity }}%</span>
+                <span class="stat-label">Humidity</span>
+              </div>
+            </div>
+            
+            <div class="stat-item">
+              <ion-icon name="leaf"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-value">{{ weatherData.windSpeed }} m/s</span>
+                <span class="stat-label">Wind Speed</span>
+              </div>
+            </div>
+            
+            <div class="stat-item">
+              <ion-icon name="rainy"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-value">{{ weatherData.precipitation }} mm</span>
+                <span class="stat-label">Precipitation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          About This App
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>This is a demonstration of a NASA Weather Explorer app built with Ionic Angular.</p>
+        <p>The app is designed to:</p>
+        <ul>
+          <li>Allow users to select locations via map or text input</li>
+          <li>Choose weather variables to analyze (temperature, precipitation, wind, etc.)</li>
+          <li>Select date ranges for historical analysis</li>
+          <li>Display interactive charts and statistical analysis</li>
+          <li>Export data in various formats</li>
+        </ul>
+        <p><strong>Data Sources:</strong> NASA MERRA-2, GPM, MODIS datasets</p>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="action-buttons">
+      <ion-button expand="block" size="large" (click)="generateSampleData()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Generate Sample Data
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

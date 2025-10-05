@@ -1,0 +1,115 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Analysis History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="header-section">
+      <ion-icon name="time" class="main-icon"></ion-icon>
+      <h1>Weather Analysis History</h1>
+      <p>View and manage your previous weather analyses</p>
+    </div>
+
+    <ion-card class="summary-card">
+      <ion-card-content>
+        <div class="summary-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ getTotalAnalyses() }}</span>
+            <span class="stat-label">Total Analyses</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ getCompletedCount() }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ analysisHistory.length > 0 ? 'Active' : 'None' }}</span>
+            <span class="stat-label">Recent Activity</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="history-section" *ngIf="analysisHistory.length > 0">
+      <h2>Recent Analyses</h2>
+      
+      <ion-list>
+        <ion-item *ngFor="let analysis of analysisHistory" class="history-item">
+          <ion-card class="analysis-card">
+            <ion-card-content>
+              <div class="analysis-header">
+                <div class="analysis-info">
+                  <h3>{{ analysis.location.name }}</h3>
+                  <p>{{ analysis.variable.name }} Analysis</p>
+                  <span class="date-range">{{ formatDateRange(analysis.dateRange) }}</span>
+                </div>
+                <div class="analysis-status">
+                  <ion-chip [color]="getStatusColor(analysis.status)">
+                    {{ analysis.status | titlecase }}
+                  </ion-chip>
+                </div>
+              </div>
+              
+              <div class="analysis-details">
+                <div class="detail-item">
+                  <ion-icon name="thermometer"></ion-icon>
+                  <span>{{ getAverageValue(analysis) }}</span>
+                </div>
+                <div class="detail-item">
+                  <ion-icon name="calendar"></ion-icon>
+                  <span>{{ formatDate(analysis.createdAt) }}</span>
+                </div>
+              </div>
+              
+              <div class="analysis-actions">
+                <ion-button fill="outline" size="small" (click)="viewAnalysis(analysis)">
+                  <ion-icon name="eye" slot="start"></ion-icon>
+                  View
+                </ion-button>
+                <ion-button fill="outline" size="small" color="danger" (click)="deleteAnalysis(analysis)">
+                  <ion-icon name="trash" slot="start"></ion-icon>
+                  Delete
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="empty-state" *ngIf="analysisHistory.length === 0">
+      <ion-icon name="document-outline"></ion-icon>
+      <h2>No Analysis History</h2>
+      <p>You haven't performed any weather analyses yet. Start exploring weather data to build your history.</p>
+      <ion-button routerLink="/weather/tabs/explore" fill="outline">
+        <ion-icon name="search" slot="start"></ion-icon>
+        Start Exploring
+      </ion-button>
+    </div>
+
+    <div class="action-buttons" *ngIf="analysisHistory.length > 0">
+      <ion-button expand="block" fill="outline" color="warning" (click)="clearAllHistory()">
+        <ion-icon name="trash" slot="start"></ion-icon>
+        Clear All History
+      </ion-button>
+    </div>
+
+    <ion-card class="tips-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="bulb"></ion-icon>
+          Tips
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul class="tips-list">
+          <li>Longer time ranges provide more reliable statistical analysis</li>
+          <li>Compare multiple variables for comprehensive weather insights</li>
+          <li>Export your analyses for external use or sharing</li>
+          <li>Use seasonal analysis to understand weather patterns</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,134 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      NASA Weather Explorer
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">NASA Weather Explorer</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <ion-icon name="partly-sunny" class="main-icon"></ion-icon>
+      <h1>Explore Historical Weather Patterns</h1>
+      <p>Discover weather trends and extreme weather likelihoods using real NASA Earth observation data.</p>
+    </div>
+
+    <!-- Current Location Card -->
+    <ion-card class="location-card" *ngIf="currentLocation">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="location"></ion-icon>
+          Current Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>{{ currentLocation.name }}</strong></p>
+        <p>Lat: {{ currentLocation.latitude | number:'1.4-4' }}, Lon: {{ currentLocation.longitude | number:'1.4-4' }}</p>
+        <ion-button 
+          fill="outline" 
+          size="small" 
+          (click)="continueWithCurrentLocation()"
+          [disabled]="isLoading">
+          Use This Location
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Selected Location Card -->
+    <ion-card class="location-card" *ngIf="selectedLocation && selectedLocation !== currentLocation">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="pin"></ion-icon>
+          Selected Location
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>{{ selectedLocation.name }}</strong></p>
+        <p>Lat: {{ selectedLocation.latitude | number:'1.4-4' }}, Lon: {{ selectedLocation.longitude | number:'1.4-4' }}</p>
+        <ion-button 
+          fill="outline" 
+          size="small" 
+          (click)="startWeatherExploration()"
+          [disabled]="isLoading">
+          Change Location
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="startWeatherExploration()"
+        [disabled]="isLoading">
+        <ion-icon name="search" slot="start"></ion-icon>
+        Start Weather Exploration
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        size="large" 
+        (click)="viewWeatherHistory()"
+        [disabled]="isLoading">
+        <ion-icon name="time" slot="start"></ion-icon>
+        View Weather History
+      </ion-button>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <h2>What You Can Explore</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <ion-icon name="thermometer"></ion-icon>
+          <h3>Temperature</h3>
+          <p>Historical temperature patterns and heat index trends</p>
+        </div>
+        <div class="feature-item">
+          <ion-icon name="rainy"></ion-icon>
+          <h3>Precipitation</h3>
+          <p>Rainfall, snowfall, and precipitation probability analysis</p>
+        </div>
+        <div class="feature-item">
+          <ion-icon name="leaf"></ion-icon>
+          <h3>Wind</h3>
+          <p>Wind speed and direction patterns over time</p>
+        </div>
+        <div class="feature-item">
+          <ion-icon name="cloudy"></ion-icon>
+          <h3>Cloud Cover</h3>
+          <p>Cloud cover percentage and atmospheric conditions</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Source Info -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="information-circle"></ion-icon>
+          Data Sources
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>This app uses real NASA Earth observation data from:</p>
+        <ul>
+          <li><strong>MERRA-2:</strong> Modern-Era Retrospective analysis for Research and Applications</li>
+          <li><strong>GPM:</strong> Global Precipitation Measurement</li>
+          <li><strong>MODIS:</strong> Moderate Resolution Imaging Spectroradiometer</li>
+        </ul>
+        <p>All data is sourced from NASA's publicly available Earth science datasets.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
